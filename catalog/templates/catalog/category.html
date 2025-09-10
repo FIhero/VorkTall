@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>category.com</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>.content-wrapper {margin-top: 80px;}</style>
+    <style>
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-wrapper {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .nav-link {
+            color: #fff !important;
+            padding: 15px 20px;
+            border-bottom: 1px solid #495057;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: #495057;
+        }
+        .user-dropdown {
+            margin-top: auto; /* прижимает к низу */
+            padding: 15px 20px;
+            border-top: 1px solid #495057;
+        }
+        .dropdown-toggle {
+            width: 100%;
+            text-align: left;
+            background-color: #49505700 !important;
+            border: none;
+            color: white !important;
+        }
+        .dropdown-toggle:hover {
+            background-color: #5a6268 !important;
+        }
+        .dropdown-menu {
+            background-color: #343a40;
+            border: 1px solid #495057;
+        }
+        .dropdown-item {
+            color: white !important;
+        }
+        .dropdown-item:hover {
+            background-color: #495057 !important;
+            color: white !important;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .content-wrapper {
+                margin-left: 0;
+            }
+            .user-dropdown {
+                margin-top: 20px;
+                border-top: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+        <div class="sidebar">
+        <div class="text-center mb-4">
+            <h5 class="text-white">Aivova</h5>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/home/">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/catalog/">Каталог</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/category/">Категории</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/contacts/">Контакты</a>
+            </li>
+        </ul>
+
+        <div class="user-dropdown">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Пользователь
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Профиль</a></li>
+                    <li><a class="dropdown-item" href="#">Выход</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="content-wrapper">
+        <div class="container">  
+            <div class="row">
+                <div class="col-md-12 p-4">
+                    <div class="text-center">
+                        <h1>Категории</h1>
+                    </div>
+                    <div class="container py-4">  
+                    <div class="d-flex justify-content-center flex-wrap gap-4">  
+                        <div class="card text-center" style="width: 15rem">
+                            <div class="card-header">Властелин Колец: Странствия по Средиземью</div>
+                            <div class="card-body">
+                                <p class="card-title h4">1500 руб</p>
+                                <p class="card-text">Кооперативная игра с глубоким сюжетом. Исследуйте Средиземье, 
+                                    сражайтесь с теневыми созданиями и выполняйте эпические квесты.</p>
+                                <button type="button" class="btn btn-outline-primary">Купить!</button>
+                            </div>
+                        </div>
+                        
+                        <div class="card card-product text-center" style="width: 15rem">
+                            <div class="card-header">Подземелья и Драконы: Стартовый набор</div>
+                            <div class="card-body">
+                                <p class="card-title h4">2500 руб</p>
+                                <p class="card-text">Идеальное начало для новых мастеров и игроков. Включает правила, 
+                                    предварительно созданных персонажей и захватывающее приключение.</p>
+                                <button type="button" class="btn btn-outline-primary">Купить!</button>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="card text-center" style="width: 15rem">
+                            <div class="card-header">Заговор Вампиров: Ночная охота</div>
+                            <div class="card-body">
+                                <p class="card-title h4">1200 руб</p>
+                                <p class="card-text">Стратегическая игра скрытых ролей. Раскрывайте 
+                                    заговоры вампиров, пока они пытаются скрыться среди смертных.</p>
+                                <button type="button" class="btn btn-outline-primary">Купить!</button>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="container py-4">  
+                    <div class="d-flex justify-content-center flex-wrap gap-4">  
+                        <div class="card text-center" style="width: 15rem">
+                            <div class="card-header">Дракон Пустоты: Коллекционная фигурка</div>
+                            <div class="card-body">
+                                <p class="card-title h4">2500 руб</p>
+                                <p class="card-text">Детализированная смоляная фигурка высотой 25 см. Ручная роспись, 
+                                    светящиеся глаза и съемные крылья. Ограниченный тираж.</p>
+                                <button type="button" class="btn btn-outline-primary">Купить!</button>
+                            </div>
+                        </div>
+                        
+                        <div class="card card-product text-center" style="width: 15rem">
+                            <div class="card-header">Эльфийские руны: Хрустальные дайсы</div>
+                            <div class="card-body">
+                                <p class="card-title h4">550 руб</p>
+                                <p class="card-text">Полный набор из 7 дайсов из оптического стекла. 
+                                    Внутри — застывшие серебряные руны. В бархатном мешочке.</p>
+                                <button type="button" class="btn btn-outline-primary">Купить!</button>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="card text-center" style="width: 15rem">
+                            <div class="card-header">Космические Дипломаты</div>
+                            <div class="card-body">
+                                <p class="card-title h4">1600 руб</p>
+                                <p class="card-text">Тактическая карточная игра о межгалактических переговорах. 
+                                    Заключайте союзы, нарушайте договоры и доминируйте в галактике.</p>
+                                <button type="button" class="btn btn-outline-primary">Купить!</button>
+                            </div>
+                        </div>
+                    </div>
+
+                                        <div class="container py-4">  
+                    <div class="d-flex justify-content-center flex-wrap gap-4">  
+                        <div class="card text-center" style="width: 15rem">
+                            <div class="card-header">Алхимики Проклятых Земель</div>
+                            <div class="card-body">
+                                <p class="card-title h4">2300 руб</p>
+                                <p class="card-text">Экономическая игра с элементами колдовства. Собирайте редкие ингредиенты, 
+                                    создавайте зелья и продавайте их искателям приключений.</p>
+                                <button type="button" class="btn btn-outline-primary">Купить!</button>
+                            </div>
+                        </div>
+                        
+                        <div class="card card-product text-center" style="width: 15rem">
+                            <div class="card-header">Драконий коготь: Обсидиановые дайсы</div>
+                            <div class="card-body">
+                                <p class="card-title h4">600 руб</p>
+                                <p class="card-text">Выточенные из вулканического стекла дайсы с золотой нумерацией. 
+                                    Каждый набор уникален благодаря природному узору камня.</p>
+                                <button type="button" class="btn btn-outline-primary">Купить!</button>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="card text-center" style="width: 15rem">
+                            <div class="card-header">Эльфийский лучник: Динамическая поза</div>
+                            <div class="card-body">
+                                <p class="card-title h4">3500 руб</p>
+                                <p class="card-text">Премиум-фигурка из ПВХ с магнитным основанием. 
+                                    Реалистичная текстура кожи и одежды, съемный лук и колчан.</p>
+                                <button type="button" class="btn btn-outline-primary">Купить!</button>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div>
+        </div>
+    </div>
+    </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

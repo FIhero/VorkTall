@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>contacts.com</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>.content-wrapper {margin-top: 80px;}</style>
+    <style>
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-wrapper {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .nav-link {
+            color: #fff !important;
+            padding: 15px 20px;
+            border-bottom: 1px solid #495057;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: #495057;
+        }
+        .user-dropdown {
+            margin-top: auto; /* прижимает к низу */
+            padding: 15px 20px;
+            border-top: 1px solid #495057;
+        }
+        .dropdown-toggle {
+            width: 100%;
+            text-align: left;
+            background-color: #49505700 !important;
+            border: none;
+            color: white !important;
+        }
+        .dropdown-toggle:hover {
+            background-color: #5a6268 !important;
+        }
+        .dropdown-menu {
+            background-color: #343a40;
+            border: 1px solid #495057;
+        }
+        .dropdown-item {
+            color: white !important;
+        }
+        .dropdown-item:hover {
+            background-color: #495057 !important;
+            color: white !important;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .content-wrapper {
+                margin-left: 0;
+            }
+            .user-dropdown {
+                margin-top: 20px;
+                border-top: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="text-center mb-4">
+            <h5 class="text-white">Aivova</h5>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/home/">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/catalog/">Каталог</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/category/">Категории</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/contacts/">Контакты</a>
+            </li>
+        </ul>
+        
+        <div class="user-dropdown">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Пользователь
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Профиль</a></li>
+                    <li><a class="dropdown-item" href="#">Выход</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="content-wrapper">
+        <div class="container-fluid">  
+            <div class="row">
+                <div class="col-md-12 p-4">
+                    <div class="text-center">
+                        <h1>Контакты</h1>
+                    </div>
+
+                    <div class="container mt-5">
+    <div class="row">
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+            <h4>Не пишите нам</h4>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name" class="form-label">Имя</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Почта</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Сообщение</label>
+                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <h4>Наши контакты</h4>
+                    <p>Email: example@mail.com</p>
+                    <p>Телефон: +7 (999) 123-45-67</p>
+                    <p>Адрес: г. Москва, ул. Примерная, д. 123</p>
+                    <p>Время работы: Пн-Пт 9:00-9:10</p>
+                    <p>Готовы писать вам сутками!</p>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+            </div>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
