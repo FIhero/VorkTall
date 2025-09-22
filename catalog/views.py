@@ -8,10 +8,11 @@ from catalog.models import Category, Product
 def home(request):
     """Контролер главной страницы"""
     latest_products = Product.objects.all().order_by('-id')[:6]
+    all_products = Product.objects.all()
     return render(request, "catalog/home.html", {
-        'latest_products': latest_products
+        'latest_products': latest_products,
+        'products': all_products
     })
-
 
 def contacts(request):
     """Контролер страницы контактов"""
