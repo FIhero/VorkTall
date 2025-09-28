@@ -36,7 +36,7 @@
 
 {% block content %}
 <div class="content-wrapper">
-    <div class="container">  
+    <div class="container">
         <div class="row">
             <div class="col-md-12 p-4">
                 <div class="text-center mb-4">
@@ -53,12 +53,12 @@
                     <div class="col-12">
                         <h4>Категории:</h4>
                         <div class="d-flex flex-wrap gap-2">
-                            <a href="/category/" class="btn btn-outline-primary btn-sm">
+                            <a href="?category={{ cat.id }}" class="btn btn-outline-primary btn-sm">
                                 Все товары
                             </a>
                             {% for cat in categories %}
-                            <a href="/category/?category={{ cat.id }}"
-                                class="btn btn-sm 
+                            <a href="?category={{ cat.id }}"
+                                class="btn btn-sm
                                 {% if 'Фантастика' in cat.name %}btn-custom-purple
                                 {% elif 'Фэнтези' in cat.name %}btn-custom-pink
                                 {% elif 'Познавательн' in cat.name %}btn-custom-blue
@@ -135,7 +135,7 @@
     </div>
 </div>
 
-                
+
 
                 {% if page_obj.has_other_pages %}
                 <nav aria-label="Page navigation" class="mt-4">

@@ -59,7 +59,6 @@ class CatalogView(TemplateView):
 
 class CategoryView(ListView):
     """Контролер страницы категории"""
-
     model = Product
     template_name = "catalog/category.html"
     context_object_name = "products"
@@ -80,9 +79,7 @@ class CategoryView(ListView):
         """Добавляет дополнительные данные в шаблон"""
         context = super().get_context_data(**kwargs)
 
-        category_id = self.kwargs.get("category_id") or self.request.GET.get(
-            "category_id"
-        )
+        category_id = self.kwargs.get("category_id") or self.request.GET.get("category")
 
         context["categories"] = Category.objects.all()
         context["selected_category"] = category_id
