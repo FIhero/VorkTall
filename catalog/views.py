@@ -1,74 +1,123 @@
 from django.contrib import messages
-from django.core.paginator import Paginator
-from django.shortcuts import redirect, render
+from django.http import Http404
+from django.views.generic import DetailView, ListView, TemplateView
 
-from catalog.models import Category, Product
+from blog.models import Post
+
+from .models import Category, Product
 
 
-def home(request):
+class HomeView(TemplateView):
     """Контролер главной страницы"""
-    latest_products = Product.objects.all().order_by('-id')[:6]
-    all_products = Product.objects.all()
-    return render(request, "catalog/home.html", {
-        'latest_products': latest_products,
-        'products': all_products
-    })
 
-def contacts(request):
+    template_name = "catalog/home.html"
+
+    def get_context_data(self, **kwargs):
+        """Добавляет контента на главную страницу"""
+        context = super().get_context_data(**kwargs)
+        context["latest_products"] = Product.objects.all().order_by("-id")[:6]
+        context["products"] = Product.objects.all()
+        context["latest_posts"] = Post.objects.filter(is_published=True).order_by(
+            "-created_at"
+        )[:3]
+        return context
+
+
+class ContactView(TemplateView):
     """Контролер страницы контактов"""
-    if request.method == "POST":
+
+    template_name = "catalog/contacts.html"
+
+    def get_context_data(self, **kwargs):
+        """Данные для страницы контакта"""
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        """Обработка POST-запросов"""
         name = request.POST.get("name")
         email = request.POST.get("email")
         message = request.POST.get("message")
 
         print(f"Новое сообщение от {name} ({email}): {message}")
-
         messages.success(request, "Сообщение отправлено")
-        return redirect("contacts")
 
-    return render(request, "catalog/contacts.html")
+        return self.get(request, *args, **kwargs)
 
 
-def catalog(request):
+class CatalogView(TemplateView):
     """Контролер страницы каталога"""
-    categories = Category.objects.all()
-    return render(request, 'catalog/catalog.html', {'categories': categories})
+
+    template_name = "catalog/catalog.html"
+
+    def get_context_data(self, **kwargs):
+        """Добавляет информацию о категориях"""
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
 
 
-def category(request):
+class CategoryView(ListView):
     """Контролер страницы категории"""
-    category_id = request.GET.get('category')
-    categories = Category.objects.all()
 
-    if category_id:
-        products = Product.objects.filter(category_id=category_id)
-        selected_category_object = Category.objects.get(id=category_id)
-    else:
-        products = Product.objects.all()
-        selected_category_object = None
+    model = Product
+    template_name = "catalog/category.html"
+    context_object_name = "products"
+    paginate_by = 18
 
-    paginator = Paginator(products, 18)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    def get_queryset(self):
+        """Фильтрует товары по категориям"""
+        queryset = Product.objects.filter()
 
-    return render(request, 'catalog/category.html', {
-        'page_obj': page_obj,
-        'selected_category': category_id,
-        'selected_category_object': selected_category_object,
-        'categories': categories,
-        'products': products
-    })
+        category_id = self.kwargs.get("category_id") or self.request.GET.get("category")
+
+        if category_id:
+            queryset = queryset.filter(category_id=category_id)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        """Добавляет дополнительные данные в шаблон"""
+        context = super().get_context_data(**kwargs)
+
+        category_id = self.kwargs.get("category_id") or self.request.GET.get(
+            "category_id"
+        )
+
+        context["categories"] = Category.objects.all()
+        context["selected_category"] = category_id
+
+        if category_id:
+            context["selected_category_object"] = Category.objects.get(id=category_id)
+
+        else:
+            context["selected_category_object"] = None
+
+        return context
 
 
-def product_detail(request, pk):
+class ProductDetailView(DetailView):
     """Контролер детальной страницы товара"""
-    try:
-        product = Product.objects.get(pk=pk)
-        related_products = Product.objects.filter(category=product.category).exclude(id=product.id)[:4]
-    except Product.DoesNotExist:
-        return render(request, '404.html', status=404)
 
-    return render(request, 'catalog/product_detail.html', {
-        'product': product,
-        'related_products': related_products
-    })
+    model = Product
+    template_name = "catalog/product_detail.html"
+    context_object_name = "product"
+
+    def get_context_data(self, **kwargs):
+        """Добавляет контент по продукту"""
+        context = super().get_context_data(**kwargs)
+
+        product = self.object
+
+        context["related_products"] = Product.objects.filter(
+            category=product.category
+        ).exclude(id=product.id)[:4]
+
+        return context
+
+    def get_object(self, queryset=None):
+        """Обработка отсутствующего товара"""
+        try:
+            return super().get_object(queryset)
+        except Product.DoesNotExist:
+            raise Http404

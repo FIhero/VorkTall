@@ -5,7 +5,7 @@
         <div class="container">
             <div class="text-center mb-5">
                 <h1>Главная</h1>
-                <p>Вы находитесь на сайте для продажи товаров.</p>
+                <p>Вы находитесь на сайте для продажи товаров, а также чтения статей.</p>
             </div>
              <div class="row mb-5">
             <div class="col-12">
@@ -70,11 +70,48 @@
 
         <div class="row mb-5">
             <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white">
+                        <h3 class="mb-0">Последние статьи</h3>
+                        <p class="text-muted">Самые свежие добавления в наш блог</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for post in latest_posts %}
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ post.title }}</h5>
+                                        <p class="card-text">{{ post.content|truncatechars:100 }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Просмотров: {{ post.views_count }}</small>
+                                            <a href="{% url 'blog:detail' post.pk %}" class="btn btn-sm btn-outline-primary">Читать</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="col-12 text-center py-4">
+                                <p class="text-muted">Статьи скоро появятся</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12">
                 <div class="card border-primary">
                     <div class="card-body text-center py-5">
-                        <p class="card-text">В нашем каталоге вы найдете еще больше категорий товаров</p>
-                        <a href="/catalog/" class="btn btn-primary btn-lg">Перейти в каталог</a>
-                        <a href="/category/" class="btn btn-outline-primary btn-lg ms-2">Смотреть все товары</a>
+                        <p class="fw-bold fs-2">Дополнение</p>
+                        <p class="card-text">В нашем каталоге вы найдете еще больше категорий товаров.</p>
+                        <a href="{% url 'catalog' %}" class="btn btn-primary btn-lg">Перейти в каталог</a>
+                        <a href="{% url 'category' %}" class="btn btn-outline-primary btn-lg ms-2">Смотреть все товары</a>
+
+                        <p class="card-text">А также моежете перейти на страницу нашего блога там ждет много интересных статей</p>
+                        <a href="{% url 'blog:list' %}" class="btn btn-primary btn-lg">Перейти в блог</a>
                     </div>
                 </div>
             </div>

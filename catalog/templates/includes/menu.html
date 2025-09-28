@@ -15,6 +15,10 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link {% if request.path == '/blogs/' or '/blog/' in request.path %}active{% endif %}" 
+               href="{% url 'blog:list' %}">Блог</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {% if request.path == '/contacts/' %}active{% endif %}" href="/contacts/">Контакты</a>
         </li>
     </ul>
@@ -25,8 +29,16 @@
                 Пользователь
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Профиль</a></li>
-                <li><a class="dropdown-item" href="#">Выход</a></li>
+                <li>
+                    <a class="dropdown-item" href="{% url 'blog:drafts' %}">
+                        Черновики
+                    </a>
+                </li>
+            <li>
+                <a class="dropdown-item" href="{% url 'blog:create' %}">
+                    Написать статью
+                </a>
+            </li>
             </ul>
         </div>
     </div>
