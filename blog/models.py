@@ -4,7 +4,7 @@ from django.db import models
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
-    preview = models.ImageField(upload_to="blog/", blank=True, null=True)
+    preview = models.ImageField(upload_to="article_images/", blank=True, null=True)
     authors = models.CharField(
         max_length=500, default="Антон", help_text="Перечисляйте авторов через запятую"
     )
