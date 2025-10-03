@@ -61,7 +61,15 @@
                         </ul>
                     </div>
                 </div>
+            <div class="d-flex gap-2 mb-4">
+            <a href="{% url 'product_update' product.pk %}" class="btn btn-outline-primary">
+                Редактировать товар
+            </a>
+            <a href="{% url 'product_delete' product.pk %}" class="btn btn-outline-danger ms-auto">
+                Удалить товар
+            </a>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

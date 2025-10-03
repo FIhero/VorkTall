@@ -17,12 +17,11 @@ class BlogListView(ListView):
     model = Post
     template_name = "blog/list.html"
     paginate_by = 6
-    context_object_name = 'post_list'
+    context_object_name = "post_list"
 
     def get_queryset(self):
         """Добавляет контент в блог"""
         return Post.objects.filter(is_published=True)
-
 
 
 class BlogDetailView(DetailView):

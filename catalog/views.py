@@ -1,10 +1,18 @@
 from django.contrib import messages
 from django.http import Http404
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import (
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+    CreateView,
+    DeleteView,
+)
 
 from blog.models import Post
 
 from .models import Category, Product
+from .forms import ProductForm
 
 
 class HomeView(TemplateView):
@@ -59,6 +67,7 @@ class CatalogView(TemplateView):
 
 class CategoryView(ListView):
     """Контролер страницы категории"""
+
     model = Product
     template_name = "catalog/category.html"
     context_object_name = "products"
@@ -118,3 +127,57 @@ class ProductDetailView(DetailView):
             return super().get_object(queryset)
         except Product.DoesNotExist:
             raise Http404
+
+
+class ProductCreateView(CreateView):
+    """Инициализирует страницу для создания продукта"""
+
+    model = Product
+    form_class = ProductForm
+    template_name = "catalog/form.html"
+
+    def get_success_url(self):
+        """После создания переходим на страницу созданного товара"""
+        return f"/products/{self.object.pk}/"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, "Товар создан!")
+        return super().form_valid(form)
+
+
+class ProductUpdateView(UpdateView):
+    """Инициализирует страницу для обновления продукта"""
+
+    model = Product
+    form_class = ProductForm
+    template_name = "catalog/form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+    def get_success_url(self):
+        """После редактирования перемещает на измененный продукт"""
+        return f"/products/{self.object.pk}/"
+
+    def form_valid(self, form):
+        messages.success(self.request, "Товар обновлен!")
+        return super().form_valid(form)
+
+
+class ProductDeleteView(DeleteView):
+    """Инициализирует страницу для удаления продукта"""
+
+    model = Product
+    template_name = "catalog/confirm_delete.html"
+    success_url = "/"
+
+    def form_valid(self, form):
+        messages.success(self.request, "Товар удален!")
+        return super().form_valid(form)
