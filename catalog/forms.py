@@ -1,7 +1,8 @@
+import os
+
 from django import forms
 
 from .models import Product
-import os
 
 
 class ProductForm(forms.ModelForm):
@@ -9,34 +10,40 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = ["name", "description", "image", "category", "price"]
         error_messages = {
-            'name': {
-                'required': "Название товара обязательно для заполнения",
-                'max_length': "Название не может превышать 100 символов"
+            "name": {
+                "required": "Название товара обязательно для заполнения",
+                "max_length": "Название не может превышать 100 символов",
             },
-            'description': {
-                'required': "Описание товара обязательно для заполнения",
+            "description": {
+                "required": "Описание товара обязательно для заполнения",
             },
-            'price': {
-                'required': "Укажите цену товара",
-                'invalid': "Введите корректную цену",
-                'max_digits': "Цена не может превышать 10 цифр",
-                'max_decimal_places': "Цена может содержать не более 2 знаков после запятой",
-                'max_whole_digits': "Слишком большое значение цены"
+            "price": {
+                "required": "Укажите цену товара",
+                "invalid": "Введите корректную цену",
+                "max_digits": "Цена не может превышать 10 цифр",
+                "max_decimal_places": "Цена может содержать не более 2 знаков после запятой",
+                "max_whole_digits": "Слишком большое значение цены",
             },
-            'category': {
-                'required': "Выберите категорию товара",
-            }
+            "category": {
+                "required": "Выберите категорию товара",
+            },
         }
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.fields['name'].error_messages = {'required': 'Название товара обязательно'}
-            self.fields['description'].error_messages = {'required': 'Описание товара обязательно'}
-            self.fields['price'].error_messages = {
-                'required': 'Укажите цену товара',
-                'invalid': 'Введите корректную цену'
+            self.fields["name"].error_messages = {
+                "required": "Название товара обязательно"
             }
-            self.fields['category'].error_messages = {'required': 'Выберите категорию товара'}
+            self.fields["description"].error_messages = {
+                "required": "Описание товара обязательно"
+            }
+            self.fields["price"].error_messages = {
+                "required": "Укажите цену товара",
+                "invalid": "Введите корректную цену",
+            }
+            self.fields["category"].error_messages = {
+                "required": "Выберите категорию товара"
+            }
 
     def clean_name(self):
         """Валидация названия продукта"""
@@ -93,7 +100,7 @@ class ProductForm(forms.ModelForm):
         image = self.cleaned_data.get("image")
         valid_extensions = [".jpg", ".jpeg", ".png", ".gif"]
 
-        if not image or image == '':
+        if not image or image == "":
             return image
 
         if isinstance(image, str):
@@ -113,9 +120,9 @@ class ProductForm(forms.ModelForm):
         """Валидация цены"""
         price = self.cleaned_data["price"]
 
-        max_price = 10 ** 8 - 0.01
+        max_price = 10**8 - 0.01
         if price > max_price:
-            raise forms.ValidationError(f"Максимальная цена: {max_price:,.2f} руб".replace(',', ' '))
+            raise forms.ValidationError(
+                f"Максимальная цена: {max_price:,.2f} руб".replace(",", " ")
+            )
         return price
-
-

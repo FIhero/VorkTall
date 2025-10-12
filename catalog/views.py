@@ -1,18 +1,13 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
-from django.views.generic import (
-    DetailView,
-    ListView,
-    TemplateView,
-    UpdateView,
-    CreateView,
-    DeleteView,
-)
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  TemplateView, UpdateView)
 
 from blog.models import Post
 
-from .models import Category, Product
 from .forms import ProductForm
+from .models import Category, Product
 
 
 class HomeView(TemplateView):
@@ -128,8 +123,7 @@ class ProductDetailView(DetailView):
         except Product.DoesNotExist:
             raise Http404
 
-
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     """Инициализирует страницу для создания продукта"""
 
     model = Product
@@ -142,7 +136,7 @@ class ProductCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        context["categories"] = Category.objects.all()
         return context
 
     def form_valid(self, form):
@@ -150,7 +144,7 @@ class ProductCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     """Инициализирует страницу для обновления продукта"""
 
     model = Product
@@ -159,7 +153,7 @@ class ProductUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        context["categories"] = Category.objects.all()
         return context
 
     def get_success_url(self):
@@ -171,7 +165,7 @@ class ProductUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     """Инициализирует страницу для удаления продукта"""
 
     model = Product

@@ -1,13 +1,8 @@
 from django.http import Http404
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    UpdateView,
-)
-from .forms import PostForm
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
+from .forms import PostForm
 from .models import Post
 
 

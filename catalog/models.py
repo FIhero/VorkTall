@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -18,10 +18,10 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     image = models.ImageField(
-        upload_to='products/',
+        upload_to="products/",
         blank=True,
         null=True,
-        default='product_images/default_product.jpg',
+        default="products/default_product.jpg",
     )
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(
@@ -29,8 +29,10 @@ class Product(models.Model):
         decimal_places=2,
         validators=[
             MinValueValidator(0.01, message="Цена должна быть положительной"),
-            MaxValueValidator(9999999.99, message="Максимальная цена: 9 999 999.99 руб")
-        ]
+            MaxValueValidator(
+                9999999.99, message="Максимальная цена: 9 999 999.99 руб"
+            ),
+        ],
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
