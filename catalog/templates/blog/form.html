@@ -52,7 +52,7 @@
 
                         <div class="mb-3 form-check">
                             <input type="checkbox" name="is_published" class="form-check-input" id="id_is_published"
-                                   {% if form.is_published.value %}checked{% endif %}>
+                                {% if form.is_published.value %}checked{% endif %}>  
                             <label class="form-check-label" for="id_is_published">
                                 Опубликовать статью
                             </label>
@@ -68,12 +68,28 @@
                                 Отмена
                             </a>
 
-                            {% if object %}
-                            <a href="{% url 'blog:delete' object.pk %}" class="btn btn-outline-danger ms-auto">
-                                Удалить статью
-                            </a>
+                            {% if user == post.owner %}
+                                <a href="{% url 'blog:delete' object.pk %}" class="btn btn-outline-danger ms-auto">
+                                    Удалить статью
+                                </a>
                             {% endif %}
                             </div>
+                        
+                            {% if form.title.errors %}
+                            <div class="text-danger small mt-1">{{ form.title.errors }}</div>
+                            {% endif %}
+
+                            {% if form.authors.errors %}
+                            <div class="text-danger small mt-1">{{ form.authors.errors }}</div>
+                            {% endif %}
+
+                            {% if form.content.errors %}
+                            <div class="text-danger small mt-1">{{ form.content.errors }}</div>
+                            {% endif %}
+
+                            {% if form.preview.errors %}
+                            <div class="text-danger small mt-1">{{ form.preview.errors }}</div>
+                            {% endif %}
                         </div>
                     </form>
                 </div>

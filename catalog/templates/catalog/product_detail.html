@@ -37,7 +37,6 @@
                 {% endif %}
                 
                 <p class="h2 text-primary mb-3">{{ product.price }} руб</p>
-
                 
                 <p class="lead">{{ product.description }}</p>
                 
@@ -50,26 +49,30 @@
                     </button>
                 </div>
             </div>
-            <div class="card mb-4">
-                    <div class="card-body">
-                        <h6 class="card-title">Техническая информация:</h6>
-                        <ul class="list-unstyled">
-                            <li><strong>Дата добавления:</strong> {{ product.created_at|date:"d.m.Y H:i" }}</li>
-                            {% if product.updated_at != product.created_at %}
-                            <li><strong>Последнее обновление:</strong> {{ product.updated_at|date:"d.m.Y H:i" }}</li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </div>
-            <div class="d-flex gap-2 mb-4">
-            <a href="{% url 'product_update' product.pk %}" class="btn btn-outline-primary">
-                Редактировать товар
-            </a>
-            <a href="{% url 'product_delete' product.pk %}" class="btn btn-outline-danger ms-auto">
-                Удалить товар
-            </a>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h6 class="card-title">Техническая информация:</h6>
+                <ul class="list-unstyled">
+                    <li><strong>Дата добавления:</strong> {{ product.created_at|date:"d.m.Y H:i" }}</li>
+                    {% if product.updated_at != product.created_at %}
+                    <li><strong>Последнее обновление:</strong> {{ product.updated_at|date:"d.m.Y H:i" }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mb-4">
+            {% if user == product.owner %}
+                <a href="{% url 'product_update' product.pk %}" class="btn btn-outline-primary">
+                    Редактировать товар
+                </a>
+                <a href="{% url 'product_delete' product.pk %}" class="btn btn-outline-danger ms-auto">
+                    Удалить товар
+                </a>
+            {% endif %}
         </div>
     </div>
-</div>
 </div>
 {% endblock %}

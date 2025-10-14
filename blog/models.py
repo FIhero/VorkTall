@@ -19,3 +19,11 @@ class Post(models.Model):
     def get_authors_list(self):
         """Разбивает строку авторов на список"""
         return [author.strip() for author in self.authors.split(",")]
+
+    class Meta:
+        verbose_name = "Статья"
+        verbose_name_plural = "Статьи"
+
+    owner = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, null=True, blank=True
+    )

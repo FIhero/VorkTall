@@ -6,15 +6,16 @@ from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 
-from .forms import UserProfileForm, UserRegistrationForm, CustomAuthenticationForm
+from .forms import CustomAuthenticationForm, UserProfileForm, UserRegistrationForm
 from .models import User
 
 
 class CustomLoginView(LoginView):
     """Инициализирует страницу входа"""
+
     template_name = "users/login.html"
     form_class = CustomAuthenticationForm
-    success_url = '/'
+    success_url = "/"
 
 
 class RegisterView(CreateView):
@@ -29,8 +30,8 @@ class RegisterView(CreateView):
         """Отправка приветственного письма после регистрации"""
         response = super().form_valid(form)
         send_mail(
-            'Добро пожаловать в Aivova!',
-            'Спасибо за регистрацию в нашем магазине.',
+            "Добро пожаловать в Aivova!",
+            "Спасибо за регистрацию в нашем магазине.",
             os.getenv("EMAIL_HOST_USER"),
             [self.object.email],
             fail_silently=False,
@@ -61,7 +62,7 @@ class AccountUpdateView(UpdateView):
 
     def get_success_url(self):
         """После редактирования перемещает на измененную страницу пользователя"""
-        return reverse_lazy('user_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy("user_detail", kwargs={"pk": self.object.pk})
 
 
 class AccountDeleteView(DeleteView):

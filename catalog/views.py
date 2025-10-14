@@ -1,8 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  TemplateView, UpdateView)
+from django.http import Http404, HttpResponseForbidden, request
+from django.shortcuts import get_object_or_404
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
 
 from blog.models import Post
 
@@ -123,6 +130,7 @@ class ProductDetailView(DetailView):
         except Product.DoesNotExist:
             raise Http404
 
+
 class ProductCreateView(LoginRequiredMixin, CreateView):
     """Инициализирует страницу для создания продукта"""
 
@@ -140,6 +148,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
+        form.instance.owner = self.request.user
         messages.success(self.request, "Товар создан!")
         return super().form_valid(form)
 
@@ -161,8 +170,27 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         return f"/products/{self.object.pk}/"
 
     def form_valid(self, form):
+        """Проверка прав перед редактированием"""
+        product = self.get_object()
+
+        if self.request.user != product.owner:
+            return HttpResponseForbidden("Вы можете редактировать только свои товары")
+
+        if "is_published" in form.changed_data:
+            if form.cleaned_data["is_published"] is False:
+                if not self.request.user.has_perm("catalog.can_unpublish_product"):
+                    return HttpResponseForbidden(
+                        "У вас нет прав на снятие с публикации"
+                    )
+
         messages.success(self.request, "Товар обновлен!")
         return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        product = self.get_object()
+        if request.user != product.owner:
+            return HttpResponseForbidden("Вы можете редактировать только свои товары")
+        return super().get(request, *args, **kwargs)
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
@@ -173,5 +201,23 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     success_url = "/"
 
     def form_valid(self, form):
+        """Проверка прав перед удалением"""
+        product = self.get_object()
+
+        if not (
+            self.request.user == product.owner
+            or self.request.user.has_perm("catalog.delete_product")
+        ):
+            return HttpResponseForbidden("Нет прав для удаления")
+
         messages.success(self.request, "Товар удален!")
         return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        product = self.get_object()
+        if not (
+            request.user == product.owner
+            or request.user.has_perm("catalog.delete_product")
+        ):
+            return HttpResponseForbidden("Нет прав для удаления этого товара")
+        return super().get(request, *args, **kwargs)

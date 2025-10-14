@@ -97,11 +97,11 @@
                                 Отмена
                             </a>
 
-                            {% if object %}
-                            <a href="{% url 'product_delete' object.pk %}" class="btn btn-outline-danger ms-auto">
+                        {% if user == product.owner %}
+                            <a href="{% url 'product_delete' product.pk %}" class="btn btn-outline-danger ms-auto">
                                 Удалить товар
                             </a>
-                            {% endif %}
+                        {% endif %}
                         </div>
                     </form>
                 </div>

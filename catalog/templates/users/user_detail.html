@@ -45,6 +45,44 @@
     background-color: #ff9f5f;
     color: white;
 }
+
+.nav-tabs .nav-link {
+    color: #6c757d;
+    border: none;
+    padding: 15px 25px;
+    font-weight: 500;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: -3px;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #ff7b54;
+    background: rgba(255, 123, 84, 0.1);
+}
+
+.nav-tabs .nav-link.active {
+    color: white;
+    background: linear-gradient(135deg, #ff9f5f, #ff7b54);
+    border: none;
+    font-weight: 600;
+    box-shadow: 0 -3px 15px rgba(255, 123, 84, 0.4);
+}
+.profile-tabs .nav-link {
+    color: darkorange !important; /* Постоянно темно-оранжевый */
+}
+
+.profile-tabs .nav-link.active {
+    color: white !important; /* Белый текст для активной */
+    background-color: darkorange !important; /* Темно-оранжевый фон */
+    border-color: darkorange !important;
+}
+
+/* Убираем стандартные стили Bootstrap при наведении */
+.profile-tabs .nav-link:hover {
+    color: darkorange !important; /* Остается темно-оранжевым при наведении */
+    border-color: darkorange darkorange transparent !important;
+}
 </style>
 {% endblock %}
 
@@ -70,21 +108,19 @@
                                 {% endif %}
                             </div>
                             
-
-                    
-                    <div class="stats-card p-3 mt-3">
-                        <h5 class="orange-text fw-bold">Статистика</h5>
-                        <div class="row text-center">
-                            <div class="col-6">
-                                <h4 class="mb-0 orange-text">{{ user.blog_posts.count }}</h4>
-                                <small class="text-muted">Статьи</small>
+                            <div class="stats-card p-3 mt-3">
+                                <h5 class="orange-text fw-bold">Статистика</h5>
+                                <div class="row text-center">
+                                    <div class="col-6">
+                                        <h4 class="mb-0 orange-text">{{ user.products_count }}</h4>
+                                        <small class="text-muted">Товары</small>
+                                    </div>
+                                    <div class="col-6">
+                                        <h4 class="mb-0 orange-text">{{ user.blog_posts }}</h4>
+                                        <small class="text-muted">Статьи</small>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-6">
-                                <h4 class="mb-0 orange-text">{{ user.blog_drafts.count }}</h4>
-                                <small class="text-muted">Черновики</small>
-                            </div>
-                        </div>
-                    </div>
                         </div>
                         
                         <div class="col-md-8">
@@ -127,16 +163,232 @@
                                     <a href="{% url 'blog:create' %}" class="btn btn-outline-orange">
                                         <i class="fas fa-plus me-2"></i>Новая статья
                                     </a>
+                                    <a href="{% url 'product_create' %}" class="btn btn-outline-orange">
+                                        <i class="fas fa-shopping-bag me-2"></i>Новый товар
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                            <div class="alert alert-info text-center">
-                                <i class="fas fa-info-circle me-2"></i>
-                                Здесь будут отображаться ваши опубликованные статьи
-                            </div>
+                    <ul class="nav nav-tabs mt-4 profile-tabs" id="profileTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="products-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#products" type="button" role="tab">
+                                <i class="fas fa-shopping-bag me-2"></i>Мои товары ({{ user.products_count }})
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="blog-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#blog" type="button" role="tab">
+                                <i class="fas fa-blog me-2"></i>Мои статьи ({{ user.blog_posts }})
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="drafts-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#drafts" type="button" role="tab">
+                                <i class="fas fa-edit me-2"></i>Черновики ({{ user.blog_drafts }})
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="sold-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#sold" type="button" role="tab">
+                                <i class="fas fa-check-circle me-2"></i>Проданные товары
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content p-3" id="profileTabsContent">
+<div class="tab-pane fade show active" id="products" role="tabpanel">
+    {% if user.product_set.all %}
+        <div class="row">
+            {% for product in user.product_set.all %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm product-card">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top" 
+                         alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                         style="height: 200px;">
+                        <i class="fas fa-image fa-2x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="card-title">{{ product.name }}</h6>
+                        <p class="card-text text-muted flex-grow-1 small">
+                            {{ product.description|truncatechars:80 }}
+                        </p>
                         
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="h6 text-primary mb-0">{{ product.price }} ₽</span>
+                            <small class="text-muted">
+                                <i class="fas fa-eye me-1"></i>👁️{{ product.views_count|default:0 }}
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'product_detail' product.pk %}" class="btn btn-outline-primary btn-sm w-100">
+                            Подробнее <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="text-center py-5">
+                                    <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+                                    <h5 class="text-muted">У вас пока нет товаров</h5>
+                                    <p class="text-muted mb-4">Создайте свой первый товар</p>
+                                    <a href="{% url 'product_create' %}" class="btn orange-bg text-white">
+                                        <i class="fas fa-plus me-2"></i>Создать товар
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+
+<div class="tab-pane fade" id="blog" role="tabpanel">
+    {% with user.post_set.all as all_posts %}
+        {% with all_posts|dictsortreversed:"created_at" as sorted_posts %}
+            <div class="row">
+                {% for post in sorted_posts %}
+                    {% if post.is_published %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm blog-card">
+                            {% if post.preview %}
+                            <img src="{{ post.preview.url }}" class="card-img-top" 
+                                alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                            {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                                style="height: 200px;">
+                                <i class="fas fa-newspaper fa-2x text-muted"></i>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="card-body d-flex flex-column">
+                                <h6 class="card-title">{{ post.title }}</h6>
+                                <p class="card-text text-muted flex-grow-1 small">
+                                    {{ post.content|striptags|truncatechars:100 }}
+                                </p>
+                                
+                                {% if post.authors %}
+                                <div class="mb-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-user-edit me-1"></i>
+                                        {{ post.authors }}
+                                    </small>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    <small class="text-muted">
+                                        <i class="fas fa-eye me-1"></i>👁️{{ post.views_count }}
+                                    </small>
+                                    <small class="text-muted">
+                                        {{ post.created_at|date:"d.m.Y" }}
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer bg-transparent">
+                                <a href="{% url 'blog:detail' post.pk %}" class="btn btn-outline-primary btn-sm w-100">
+                                    Читать <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-blog fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">У вас пока нет опубликованных статей</h5>
+                    <p class="text-muted mb-4">Поделитесь своими мыслями с миром</p>
+                    <a href="{% url 'blog:create' %}" class="btn orange-bg text-white">
+                        <i class="fas fa-plus me-2"></i>Написать статью
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        {% endwith %}
+    {% endwith %}
+</div>
+
+<div class="tab-pane fade" id="drafts" role="tabpanel">
+    {% with user.post_set.all as all_posts %}
+        {% with all_posts|dictsortreversed:"created_at" as sorted_posts %}
+            <div class="row">
+                {% for post in sorted_posts %}
+                    {% if not post.is_published %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm draft-card">
+                            <div class="card-header bg-warning bg-opacity-10 border-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fas fa-edit me-1"></i>Черновик
+                                    </span>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        {{ post.created_at|date:"d.m.Y" }}
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div class="card-body d-flex flex-column">
+                                <h6 class="card-title text-dark">{{ post.title }}</h6>
+                                <p class="card-text text-muted flex-grow-1 small">
+                                    {{ post.content|striptags|truncatechars:120 }}
+                                </p>
+                                
+                                {% if post.authors %}
+                                <div class="mb-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-user-edit me-1"></i>
+                                        {{ post.authors }}
+                                    </small>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="mt-auto">
+                                    <small class="text-muted">
+                                        <i class="fas fa-edit me-1"></i>
+                                        Обновлено: {{ post.updated_at|date:"d.m.Y" }}
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'blog:update' post.pk %}" class="btn btn-warning btn-sm flex-fill">
+                                        <i class="fas fa-edit me-1"></i>Редактировать
+                                    </a>
+                                    <a href="{% url 'blog:delete' post.pk %}" class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-trash"></i>Удалить
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-edit fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">У вас пока нет черновиков</h5>
+                    <p class="text-muted">Созданные, но не опубликованные статьи появятся здесь</p>
+                </div>
+                {% endfor %}
+            </div>
+        {% endwith %}
+    {% endwith %}
+</div>
+
+                        <div class="tab-pane fade" id="sold" role="tabpanel">
+                            <div class="text-center py-5">
+                                <i class="fas fa-check-circle fa-3x text-muted mb-3"></i>
+                                <p class="text-muted small">Здесь будут отображаться ваши проданные товары</p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -31,16 +31,19 @@ class User(AbstractUser):
     def blog_posts(self):
         """Количество опубликованных статей пользователя"""
         from blog.models import Post
-        return Post.objects.filter(authors=self, is_published=True).count()
+
+        return Post.objects.filter(owner=self, is_published=True).count()
 
     @property
     def blog_drafts(self):
         """Количество черновиков пользователя"""
         from blog.models import Post
-        return Post.objects.filter(authors=self, is_published=False).count()
+
+        return Post.objects.filter(owner=self, is_published=False).count()
 
     @property
     def products_count(self):
         """Количество товаров пользователя"""
         from catalog.models import Product
+
         return Product.objects.filter(owner=self).count()

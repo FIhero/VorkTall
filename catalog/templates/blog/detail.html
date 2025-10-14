@@ -20,6 +20,7 @@
                 {{ post.content|linebreaks }}
             </div>
 
+            <div class="card mt-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <small class="text-muted">Создано: {{ post.created_at|date:"d.m.Y H:i" }}</small>
@@ -33,7 +34,7 @@
                     {% endif %}
                 </div>
             </div>
-
+        </div>
 
         <div class="col-lg-4">
             <div class="card mb-4">
@@ -41,20 +42,19 @@
                     <h5 class="mb-0">Авторы</h5>
                 </div>
                 <div class="card-body">
-                {% for author in post.get_authors_list %}
-                <div class="text-center">
-                    <div class="mb-2">
-                        <i class="fas fa-user-circle fa-2x 
-                            {% cycle 'text-primary' 'text-success' 'text-warning' 'text-info' %}"></i>
+                    {% for author in post.get_authors_list %}
+                    <div class="text-center">
+                        <div class="mb-2">
+                            <i class="fas fa-user-circle fa-2x 
+                                {% cycle 'text-primary' 'text-success' 'text-warning' 'text-info' %}"></i>
+                        </div>
+                        <small class="fw-bold">{{ author }}</small>
                     </div>
-                    <small class="fw-bold">{{ author }}</small>
-                </div>
-                {% endfor %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
-
-
+    </div>
 
     <div class="row mt-5">
         <div class="col-12">
@@ -62,15 +62,18 @@
                 <a href="{% url 'blog:list' %}" class="btn btn-outline-primary">
                     ← Назад к статьям
                 </a>
+                {% if user == post.owner %}
                 <a href="{% url 'blog:update' post.pk %}" class="btn btn-outline-secondary">
                     Редактировать
                 </a>
+                {% endif %}
+                {% if user == post.owner %}
                 <a href="{% url 'blog:delete' post.pk %}" class="btn btn-outline-danger ms-auto">
                     Удалить
                 </a>
+                {% endif %}
             </div>
         </div>
     </div>
-</div>
 </div>
 {% endblock %}
