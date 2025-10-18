@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpResponseForbidden, request
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -15,6 +17,7 @@ from blog.models import Post
 
 from .forms import ProductForm
 from .models import Category, Product
+from .services import get_products_by_category
 
 
 class HomeView(TemplateView):
@@ -76,15 +79,13 @@ class CategoryView(ListView):
     paginate_by = 18
 
     def get_queryset(self):
-        """Фильтрует товары по категориям"""
-        queryset = Product.objects.filter()
-
+        """Фильтрует товары по категориям используя сервисную функцию"""
         category_id = self.kwargs.get("category_id") or self.request.GET.get("category")
 
         if category_id:
-            queryset = queryset.filter(category_id=category_id)
-
-        return queryset
+            return get_products_by_category(category_id)
+        else:
+            return Product.objects.all()
 
     def get_context_data(self, **kwargs):
         """Добавляет дополнительные данные в шаблон"""
@@ -96,14 +97,18 @@ class CategoryView(ListView):
         context["selected_category"] = category_id
 
         if category_id:
-            context["selected_category_object"] = Category.objects.get(id=category_id)
-
+            try:
+                context["selected_category_object"] = Category.objects.get(id=category_id)
+            except Category.DoesNotExist:
+                context["selected_category_object"] = None
+                messages.error(self.request, "Категория не найдена")
         else:
             context["selected_category_object"] = None
 
         return context
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductDetailView(DetailView):
     """Контролер детальной страницы товара"""
 
