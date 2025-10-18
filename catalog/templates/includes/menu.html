@@ -1,0 +1,87 @@
+<div class="sidebar">
+    <div class="text-center mb-4">
+        <h5 class="text-white">Aivova</h5>
+    </div>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Главная</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/catalog/' %}active{% endif %}" href="/catalog/">Каталог</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/category/' %}active{% endif %}" href="/category/">
+                Категории
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/blogs/' or '/blog/' in request.path %}active{% endif %}" 
+               href="{% url 'blog:list' %}">Блог</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == '/contacts/' %}active{% endif %}" href="/contacts/">Контакты</a>
+        </li>
+    </ul>
+
+    <div class="user-dropdown">
+        <div class="dropdown">
+            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {% if user.is_authenticated %}
+                    {{ user.first_name }}  
+                {% else %}
+                    Гость
+                {% endif %}
+            </button>
+
+            <ul class="dropdown-menu">
+                {% if user.is_authenticated %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'blog:create' %}">
+                            Написать статью
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'blog:drafts' %}">
+                            Черновики
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'product_create' %}">
+                            Создать товар
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'user_detail' user.pk %}">
+                            Мой профиль
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'user_edit' user.pk %}">
+                            Редактировать профиль
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <form method="post" action="{% url 'logout' %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="dropdown-item btn btn-link">
+                            <i class="fas fa-sign-out-alt me-2"></i>Выйти
+                        </button>
+                    </form>
+                {% else %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'register' %}">
+                            Зарегистрироваться
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'login' %}">
+                            Войти
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>

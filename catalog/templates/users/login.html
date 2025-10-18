@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<style>
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    background-color: #ff9f5f; 
+    border-color: #ff9f5f;
+}
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s;
+    margin-top: 8px; 
+    display: block; 
+    width: 100%;
+}
+.form-control:focus {
+    border-color: #fffd6a;
+    box-shadow: 0 0 0 0.2rem rgba(255, 159, 95, 0.25);
+}
+.btn-primary {
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: 600;
+    background-color: #ff9f5f !important; 
+    border-color: #ff9f5f !important;
+}
+.btn-primary:hover {
+    background-color: #e88f4f !important;
+    border-color: #e88f4f !important;
+}
+.alert {
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+.text-primary {
+    color: #ff9f5f !important;
+}
+a.text-primary {
+    color: #ff9f5f !important;
+}
+a.text-primary:hover {
+    color: #e88f4f !important;
+}
+.form-label {
+    display: block; 
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-white text-center py-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Вход в Aivova
+                    </h3>
+                    <p class="mb-0 mt-2 opacity-75">Войдите в свой аккаунт</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                                <label for="id_username" class="form-label">
+                                    <i class="fas fa-envelope me-2 text-primary"></i>Email
+                                </label>
+                            <input type="email" 
+                                name="username" 
+                                class="form-control" 
+                                id="username"
+                                placeholder="Введите ваш email"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+                             <label for="id_password" class="form-label">
+                                <i class="fas fa-lock me-2 text-primary"></i>Пароль
+                            </label>
+                            <input type="password" 
+                                   name="password" 
+                                   class="form-control" 
+                                   id="password"
+                                   placeholder="Введите пароль"
+                                   required>
+                            {% if form.password.errors %}
+                            <div class="alert alert-danger mt-2">
+                                {{ form.password.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Войти
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer text-center py-3">
+                    <p class="mb-0">
+                        Еще не с нами?
+                        <a href="{% url 'register' %}" class="text-primary text-decoration-none fw-bold">
+                            Зарегистрироваться
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

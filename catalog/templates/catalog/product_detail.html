@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container py-4">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                <li class="breadcrumb-item"><a href="/category/">Категории</a></li>
+                {% if product.category %}
+                <li class="breadcrumb-item">
+                    <a href="/category/?category={{ product.category.id }}">
+                        {{ product.category.name }}
+                    </a>
+                </li>
+                {% endif %}
+                <li class="breadcrumb-item active">{{ product.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
+                {% else %}
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <i class="fas fa-image fa-3x text-muted"></i>Допустим, Здравствуйте
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="col-md-6">
+                <h1>{{ product.name }}</h1>
+                
+                {% if product.category %}
+                <p class="text-muted">Категория: {{ product.category.name }}</p>
+                {% endif %}
+                
+                <p class="h2 text-primary mb-3">{{ product.price }} руб</p>
+                
+                <p class="lead">{{ product.description }}</p>
+                
+                <div class="d-grid gap-2 d-md-flex">
+                    <button class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-cart"></i> В корзину
+                    </button>
+                    <button class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-heart"></i> В избранное
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h6 class="card-title">Техническая информация:</h6>
+                <ul class="list-unstyled">
+                    <li><strong>Дата добавления:</strong> {{ product.created_at|date:"d.m.Y H:i" }}</li>
+                    {% if product.updated_at != product.created_at %}
+                    <li><strong>Последнее обновление:</strong> {{ product.updated_at|date:"d.m.Y H:i" }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mb-4">
+            {% if user == product.owner %}
+                <a href="{% url 'product_update' product.pk %}" class="btn btn-outline-primary">
+                    Редактировать товар
+                </a>
+                <a href="{% url 'product_delete' product.pk %}" class="btn btn-outline-danger ms-auto">
+                    Удалить товар
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0 text-center">Удаление товара</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-exclamation-triangle fa-3x text-danger"></i>
+                    </div>
+
+                    <h4>Вы уверены, что хотите удалить товар?</h4>
+                    <p class="text-muted">"<strong>{{ object.name }}</strong>"</p>
+                    <p class="text-muted">Это действие нельзя отменить!</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button type="submit" class="btn btn-danger">
+                                Да, удалить
+                            </button>
+                            <a href="{% url 'product_detail' object.pk %}" class="btn btn-outline-secondary">
+                                Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

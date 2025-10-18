@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<style>
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    background-color: #ff9f5f; 
+    border-color: #ff9f5f;
+}
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s;
+    margin-top: 8px; 
+    display: block; 
+    width: 100%;
+}
+.form-control:focus {
+    border-color: #fffd6a;
+    box-shadow: 0 0 0 0.2rem rgba(255, 159, 95, 0.25);
+}
+.btn-primary {
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: 600;
+    background-color: #ff9f5f !important; 
+    border-color: #ff9f5f !important;
+}
+.btn-primary:hover {
+    background-color: #e88f4f !important;
+    border-color: #e88f4f !important;
+}
+.alert {
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+.text-primary {
+    color: #ff9f5f !important;
+}
+a.text-primary {
+    color: #ff9f5f !important;
+}
+a.text-primary:hover {
+    color: #e88f4f !important;
+}
+.form-label {
+    display: block; 
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-white text-center py-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Добро пожаловать в Aivova!
+                    </h3>
+                    <p class="mb-0 mt-2 opacity-75">Создайте свой уникальный аккаунт</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                                    <i class="fas fa-user me-2 text-primary"></i>Имя
+                                </label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                                    Фамилия
+                                </label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">
+                                    <i class="fas fa-envelope me-2 text-primary"></i>Email
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                <div class="alert alert-danger mt-2">
+                                    {{ form.email.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.phone.id_for_label }}" class="form-label">
+                                    <i class="fas fa-phone me-2 text-primary"></i>Телефон*
+                                </label>
+                                {{ form.phone }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.password1.id_for_label }}" class="form-label">
+                                    <i class="fas fa-lock me-2 text-primary"></i>Пароль
+                                </label>
+                                {{ form.password1 }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.password2.id_for_label }}" class="form-label">
+                                    Подтвердите пароль
+                                </label>
+                                {{ form.password2 }}
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div class="col-md-6 mb-3 text-center">
+                                <label for="{{ form.country.id_for_label }}" class="form-label">
+                                    <i class="fas fa-globe me-2 text-primary"></i>Страна*
+                                </label>
+                                {{ form.country }}
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-rocket me-2"></i>
+                                Стать частью корабля
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer text-center py-3">
+                    <p class="mb-0">
+                        Уже с нами? 
+                        <a href="{% url 'login' %}" class="text-primary text-decoration-none fw-bold">
+                            Войдите в аккаунт
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
